@@ -22,5 +22,17 @@ class project_subcategory(orm.Model):
         'subsubcategory_ids': fields.one2many('project.subsubcategory', 'subcategory_id', 'اﻻقسام تحت الفرعيه')
 
     }
+    
+    
+class project_subsubcategory(orm.Model):
+    _name = 'project.subsubcategory'
+    _columns = {
+        'name': fields.char('اﻻسم', size=30),
+        'description': fields.text('الوصف'),
+        'code': fields.integer('الكود', required=True),
+        'subcategory_id': fields.many2one('project.subcategory', 'اﻻقسام الفرعيه')
+
+    }
+
 
 

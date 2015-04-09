@@ -80,6 +80,51 @@
             </field>
         </record>
         <!--*******************************************************************************************-->
+         
+         
+         
+         
+         
+        <record model="ir.ui.view" id="project_subcategory_form">
+            <field name="name"/>
+            <field name="model">project.subcategory</field>
+            <field name="arch" type="xml">
+                <form string="Subcategories" version="7.0">
+                    <sheet>
+                        <group>
+                            <group>
+
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="code"/>
+
+                            </group>
+                            <group>
+                                <field name="category_id"/>
+                                <!--<field name="subsubcategory_ids"/>-->
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="project_subcategory_tree">
+            <field name="name"/>
+            <field name="model">project.subcategory</field>
+            <field name="arch" type="xml">
+                <tree string="Subcategories" version="7.0">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="code"/>
+                    <field name="category_id"/>
+                    <!--<field name="subsubcategory_ids"/>-->
+
+                </tree>
+            </field>
+        </record>
+        <!--*******************************************************************************************-->
         <record id="project_category_action" model="ir.actions.act_window">
             <field name="name">project category</field>
             <field name="res_model">project.category</field>
@@ -96,6 +141,13 @@
         </record>
         <menuitem id="subcategory_name" name="subcategory" parent="warehouse_menu" action="project_subcategory_action"/>
         <!--**************************************-->
+            <record id="project_subsubcategory_action" model="ir.actions.act_window">
+            <field name="name">project subsubcategory</field>
+            <field name="res_model">project.subsubcategory</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="subsubcategory_name" name="subsubcategory" parent="warehouse_menu" action="project_subsubcategory_action"/>
   
 
 
