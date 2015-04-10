@@ -82,6 +82,41 @@
         <!--*******************************************************************************************-->
          
          
+        <record model="ir.ui.view" id="project_warehouse_tree">
+            <field name="name">project.warehouse.tree</field>
+            <field name="model">project.warehouse</field>
+            <field name="arch" type="xml">
+                <tree string="My Warehouse">
+                    <field name="name"/>
+                    <field name="address"/>
+                    <field name="product_ids"/>
+                    <!--<field name="keeper_id"/>-->
+                    <!--<field name="manager_id"/>-->
+                    <!--<field name="supermanager_id"/>-->
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="project_warehouse_form">
+            <field name="name">project.warehouse.form</field>
+            <field name="model">project.warehouse</field>
+            <field name="arch" type="xml">
+                <form string="Mywarehouse" version="7.0">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <!--<field name="keeper_id"/>-->
+                            <!--<field name="manager_id"/>-->
+                            <!--<field name="supermanager_id"/>-->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--***************************************************************-->
+         
          
         <record id="project_product_tree" model="ir.ui.view">
             <field name="name">project.product.tree</field>
@@ -233,7 +268,18 @@
         </record>
         <menuitem id="product_name" name="product" parent="warehouse_menu" action="project_product_action"/>
 
+      <!--***************************************************************-->
+        <record id="project_warehouse_action" model="ir.actions.act_window">
+            <field name="name">project warehouse</field>
+            <field name="res_model">project.warehouse</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 
+        <menuitem id="top_iti" name="HrWarehouse"/>
+        <menuitem id="warehouse_menu" name="Our WareHouse" parent="top_iti"/>
+        <menuitem id="ware_name" name="Ware House" parent="warehouse_menu" action="project_warehouse_action"/>
+        <!--****************************-->
 
 
     </data>

@@ -147,4 +147,14 @@ class project_product(orm.Model):
     
 
 
+class project_warehouse(orm.Model):
+    _name = 'project.warehouse'
+    _columns = {
+        'name': fields.char('اﻻسم', size=30, required=True),
+        'address': fields.char('العنوان', size=100),
+        # 'keeper_id':fields.many2one('hr','امين المخزن',select=True),
+        # 'manager_id':fields.many2one('hr','مدير ',select=True),
+        # 'supermanager_id':fields.many2one('hr','الرئيس',select=True ,domain="[('id','=','ref('ourwarehouse.group_iti_warehouse_supermanager')')]"),),
+        'product_ids': fields.one2many('project.product', 'warehouse_id', string="المنتجات"),
 
+    }
