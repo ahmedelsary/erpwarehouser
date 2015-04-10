@@ -196,6 +196,57 @@
 <!--******************************************************************************-->
          
          
+<record model="ir.ui.view" id="project_employees_tree">
+            <field name="name">project.employees.tree</field>
+            <field name="model">project.employees</field>
+            <field name="arch" type="xml">
+                <tree string="project_employees">
+                     <field name="pic"/>
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="salary"/>
+                    <field name="gender" required="1"/>
+                    <field name="check"/>
+                    <field name="user_system" required="1"/>
+                  <field name="warehouse_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+       <record id="project_employees_form" model="ir.ui.view">
+            <field name="name">project.employees.form</field>
+            <field name="model">project.employees</field>
+            <field name="arch" type="xml">
+                <form string="project employees" version="7.0">
+          
+                    <group string="basic info">
+                         <field name="pic"/>
+                        <field name="name"/>
+                        <field name="age"/>
+                        <field name="salary" attrs="{'invisible': [('gender', '=', 'f')]}"/>
+                         <field name="gender" required="1"/>
+
+                        <field name="user_system" required="1"/>
+
+
+                            <field name="check"/>
+ <field name="warehouse_id"/>
+
+                  </group>
+                </form>
+            </field>
+        </record>
+        <record id="project_employees_action" model="ir.actions.act_window">
+            <field name="name">project.employees.action</field>
+            <field name="res_model">project.employees</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+         
+         
+         
+         
         <record model="ir.ui.view" id="project_subcategory_form">
             <field name="name"/>
             <field name="model">project.subcategory</field>

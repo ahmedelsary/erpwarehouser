@@ -8,7 +8,9 @@
     'depends': [],
     'data': [
         'project_view.xml',
-        'project_workflow.xml'
+        'project_workflow.xml',
+        'security/iti_security.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'auto_install': False,

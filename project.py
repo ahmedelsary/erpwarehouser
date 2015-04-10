@@ -158,3 +158,19 @@ class project_warehouse(orm.Model):
         'product_ids': fields.one2many('project.product', 'warehouse_id', string="المنتجات"),
 
     }
+    
+class project_employees(orm.Model):
+    gender = [('f', 'female'), ('m', 'male')]
+    _name = 'project.employees'
+    _columns = {
+        'name': fields.char('Name'),
+        'age': fields.integer('Age'),
+        'salary': fields.integer('Salary'),
+        'gender': fields.selection(gender, 'Gender'),
+        'check': fields.boolean('Check'),
+         'pic': fields.binary('Image',widget='Image'),
+         'warehouse_id': fields.many2one('project.warehouse', 'Warehouse'),
+        'user_system':fields.many2one("res.users","User System"),
+
+    }
+    
