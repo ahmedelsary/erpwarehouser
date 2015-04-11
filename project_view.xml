@@ -138,7 +138,6 @@
                     <field name="code"/>
                     <field name="min"/>
                     <field name="quantity"/>
-
                     <field name="max"/>
                     <field name="warehouse_id"/>
                     <field name="subsubcatid"/>
@@ -221,9 +220,9 @@
                     <field name="age"/>
                     <field name="salary"/>
                     <field name="gender" required="1"/>
-                    <field name="check"/>
                     <field name="user_system" required="1"/>
                     <field name="warehouse_id"/>
+                    <field name="manger_id"/>
                 </tree>
             </field>
         </record>
@@ -236,16 +235,14 @@
                 <form string="project employees" version="7.0">
 
                     <group string="basic info">
-                        <field name="pic"/>
+                        <field name="pic" widget="image"/>
                         <field name="name"/>
                         <field name="age"/>
-                        <field name="salary" attrs="{'invisible': [('gender', '=', 'f')]}"/>
+                        <field name="salary"/>
                         <field name="gender" required="1"/>
 
                         <field name="user_system" required="1"/>
-
-
-                        <field name="check"/>
+                        <field name="manger_id"/>
                         <field name="warehouse_id"/>
 
                     </group>
@@ -353,9 +350,9 @@
             <field name="arch" type="xml">
                 <search string="Product Search">
                     <filter string="My product" icon="terp-partner"
-                        name="my_products"
-                        domain="[('warehouse_id.keeper_id.id','=',uid)]"
-                        help="My own product" />
+                            name="my_products"
+                            domain="[('warehouse_id.keeper_id.id','=',uid)]"
+                            help="My own product"/>
                     <field name="name"/>
                     <field name="code"/>
 
@@ -372,6 +369,65 @@
                   name="Products"
                   parent="warehouse_menu"
                   action="product_list_action"/>
+
+        <menuitem id="pro_emp_menu"
+                  name="Employees"
+                  parent="warehouse_menu"
+                  action="project_employees_action"/>
+
+
+        <!--===========================================El3hda=====================-->
+
+
+        <record model="ir.ui.view" id="_tree_view">
+            <field name="name">project.el3hda.tree</field>
+            <field name="model">project.el3hda</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="el3hda">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="el3hda_form_view" model="ir.ui.view">
+            <field name="name">project.el3hda.form</field>
+            <field name="model">project.el3hda</field>
+            <field name="arch" type="xml">
+                <form string="el3hda_form" version="7.0">
+                    <header>
+                        <button name="el3hda_draft" string="managerConfirm" states="draft"
+                                class="oe_highlight"/>
+                         <button name="el3hda_managerConfirm" string="warehouse manger Confirm" states="managerConfirm"
+                                class="oe_highlight"/>
+                         <button name="el3hda_warehouseConfirm" string="done" states="warehouseConfirm"
+                                class="oe_highlight"/>
+                         <field name="state"  widget="statusbar"
+                                   statusbar_visible="draft,managerConfirm,warehouseConfirm,done"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" required="1"/>
+                            <field name="type" required="1"/>
+                            <field name="user_id" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="el3hda_list_action">
+            <field name="name">El3hda</field>
+            <field name="res_model">project.el3hda</field>
+        </record>
+        <menuitem id="pro_3hda_menu"
+                  name="El3hda"
+                  parent="warehouse_menu"
+                  action="el3hda_list_action"/>
+
 
     </data>
 </openerp>

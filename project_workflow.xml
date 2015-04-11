@@ -2,103 +2,161 @@
 <openerp>
     <data>
 
+
+        <record model="workflow" id="wkf_el3hda">
+            <field name="name">project.el3hda.workflow</field>
+            <field name="osv">project.el3hda</field>
+            <field name="on_create" eval='True'/>
+        </record>
+
+        <record model="workflow.activity" id="act_draft">
+            <field name="wkf_id" ref="wkf_el3hda"/>
+            <field name="flow_start" eval='True'/>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">product_draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_managerConfirm">
+            <field name="wkf_id" ref="wkf_el3hda"/>
+            <field name="name">managerConfirm</field>
+            <field name="kind">function</field>
+            <field name="action">product_managerConfirm()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_warehouseConfirm">
+            <field name="wkf_id" ref="wkf_el3hda"/>
+            <field name="name">warehouseConfirm</field>
+            <field name="kind">function</field>
+            <field name="action">product_warehouseConfirm()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_done">
+            <field name="wkf_id" ref="wkf_el3hda"/>
+            <field name="flow_stop" eval="True"/>
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">product_done()</field>
+        </record>
+
+        draft,managerConfirm,warehouseConfirm,done
+        <record model="workflow.transition" id="tt1">
+            <field name="act_from" ref="act_draft"/>
+            <field name="act_to" ref="act_managerConfirm"/>
+            <field name="signal">el3hda_draft</field>
+        </record>
+        <record model="workflow.transition" id="tt2">
+            <field name="act_from" ref="act_managerConfirm"/>
+            <field name="act_to" ref="act_warehouseConfirm"/>
+            <field name="signal">el3hda_managerConfirm</field>
+        </record>
+        <record model="workflow.transition" id="tt3">
+            <field name="act_from" ref="act_warehouseConfirm"/>
+            <field name="act_to" ref="act_done"/>
+            <field name="signal">el3hda_warehouseConfirm</field>
+        </record>
+
+
+
+        
+
+
+
+
         <record model="workflow" id="wkf_product">
             <field name="name">project.product.workflow</field>
             <field name="osv">project.product</field>
-            <field name="on_create" eval='True' />
+            <field name="on_create" eval='True'/>
         </record>
 
         <record model="workflow.activity" id="act_new">
-            <field name="wkf_id" ref="wkf_product" />
-            <field name="flow_start" eval='True' />
+            <field name="wkf_id" ref="wkf_product"/>
+            <field name="flow_start" eval='True'/>
             <field name="name">new</field>
             <field name="kind">function</field>
             <field name="action">product_new()</field>
         </record>
 
         <record model="workflow.activity" id="act_recieved">
-            <field name="wkf_id" ref="wkf_product" />
+            <field name="wkf_id" ref="wkf_product"/>
             <field name="name">recieved</field>
             <field name="kind">function</field>
             <field name="action">product_recieved()</field>
         </record>
 
         <record model="workflow.activity" id="act_under_review">
-            <field name="wkf_id" ref="wkf_product" />
+            <field name="wkf_id" ref="wkf_product"/>
             <field name="name">underReview</field>
             <field name="kind">function</field>
             <field name="action">product_underReview()</field>
         </record>
 
         <record model="workflow.activity" id="act_approved">
-            <field name="wkf_id" ref="wkf_product" />
+            <field name="wkf_id" ref="wkf_product"/>
             <field name="name">approved</field>
             <field name="kind">function</field>
             <field name="action">product_approved()</field>
         </record>
 
         <record model="workflow.activity" id="act_keeper_confirm">
-            <field name="wkf_id" ref="wkf_product" />
+            <field name="wkf_id" ref="wkf_product"/>
             <field name="name">keeperConfirm</field>
             <field name="kind">function</field>
             <field name="action">product_keeper_confirm()</field>
         </record>
 
         <record model="workflow.activity" id="act_manager_confirm">
-            <field name="wkf_id" ref="wkf_product" />
+            <field name="wkf_id" ref="wkf_product"/>
             <field name="name">managerConfirm</field>
             <field name="kind">function</field>
             <field name="action">product_manager_confirm()</field>
         </record>
 
         <record model="workflow.activity" id="act_in_stock">
-            <field name="wkf_id" ref="wkf_product" />
-            <field name="flow_stop" eval="True" />
+            <field name="wkf_id" ref="wkf_product"/>
+            <field name="flow_stop" eval="True"/>
             <field name="name">inStock</field>
             <field name="kind">function</field>
             <field name="action">product_in_stock()</field>
         </record>
 
 
-
         <record model="workflow.transition" id="t1">
-            <field name="act_from" ref="act_new" />
-            <field name="act_to" ref="act_recieved" />
+            <field name="act_from" ref="act_new"/>
+            <field name="act_to" ref="act_recieved"/>
             <field name="signal">product_recieved</field>
         </record>
 
         <record model="workflow.transition" id="t2">
-            <field name="act_from" ref="act_recieved" />
-            <field name="act_to" ref="act_under_review" />
+            <field name="act_from" ref="act_recieved"/>
+            <field name="act_to" ref="act_under_review"/>
             <field name="signal">product_under_review</field>
         </record>
 
         <record model="workflow.transition" id="t3">
-            <field name="act_from" ref="act_under_review" />
-            <field name="act_to" ref="act_approved" />
+            <field name="act_from" ref="act_under_review"/>
+            <field name="act_to" ref="act_approved"/>
             <field name="signal">product_approved_commit1</field>
         </record>
 
 
-
         <record model="workflow.transition" id="t4">
-            <field name="act_from" ref="act_approved" />
-            <field name="act_to" ref="act_keeper_confirm" />
+            <field name="act_from" ref="act_approved"/>
+            <field name="act_to" ref="act_keeper_confirm"/>
             <field name="signal">product_keeper_confirm</field>
         </record>
 
         <record model="workflow.transition" id="t5">
-            <field name="act_from" ref="act_keeper_confirm" />
-            <field name="act_to" ref="act_manager_confirm" />
+            <field name="act_from" ref="act_keeper_confirm"/>
+            <field name="act_to" ref="act_manager_confirm"/>
             <field name="signal">product_manager_confirm</field>
         </record>
 
         <record model="workflow.transition" id="t6">
-            <field name="act_from" ref="act_manager_confirm" />
-            <field name="act_to" ref="act_in_stock" />
+            <field name="act_from" ref="act_manager_confirm"/>
+            <field name="act_to" ref="act_in_stock"/>
             <field name="signal">product_in_stock</field>
         </record>
-
 
 
     </data>

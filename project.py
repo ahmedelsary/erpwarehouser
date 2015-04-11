@@ -93,7 +93,7 @@ class project_product(orm.Model):
         'type': fields.char('النوع'),
         'company_name': fields.char('اسم الشركه'),
         'image': fields.binary('صورة'),
-        'quantity': fields.integer("الكميه" ),
+        'quantity': fields.integer("الكميه"),
         'price': fields.char('السعر'),
         'production_date': fields.date('تاريخ اﻻنتاج'),
         'expiry_date': fields.date('تاريخ اﻻنتهاء'),
@@ -181,6 +181,43 @@ class project_warehouse(orm.Model):
     }
 
 
+class project_el3hda(orm.Model):
+    t = [('request', 'طلب'), ('return', 'ارجاع')]
+    _name = "project.el3hda"
+    _columns = {
+        'name': fields.char("الاسم", size=265),
+        'type': fields.selection(t, "النوع"),
+        'user_id': fields.many2one("res.users", "المستخدم"),
+        'state': fields.selection(string="الحاله", selection=[
+            ('draft', 'Draft'),
+            ('managerConfirm', 'Manager Confirm'),
+            ('warehouseConfirm', 'Warehouse Manger Confirm'),
+            ('done', 'Done'),
+        ], readonly=True),
+
+    }
+    _defaults = {
+        'state': 'draft',
+        # 'user_id': lambda self, cr, uid, c: self.pool.get('res.users').browse(cr, uid, uid, c)[0],
+    }
+
+    def product_draft(self, cr, uid, ids):
+        self.write(cr, uid, ids, {'state': 'draft'})
+        return True
+
+    def product_managerConfirm(self, cr, uid, ids):
+        self.write(cr, uid, ids, {'state': 'managerConfirm'})
+        return True
+
+    def product_warehouseConfirm(self, cr, uid, ids):
+        self.write(cr, uid, ids, {'state': 'warehouseConfirm'})
+        return True
+
+    def product_done(self, cr, uid, ids):
+        self.write(cr, uid, ids, {'state': 'done'})
+        return True
+
+
 class project_employees(orm.Model):
     gender = [('f', 'female'), ('m', 'male')]
     _name = 'project.employees'
@@ -189,10 +226,9 @@ class project_employees(orm.Model):
         'age': fields.integer('Age'),
         'salary': fields.integer('Salary'),
         'gender': fields.selection(gender, 'Gender'),
-        'check': fields.boolean('Check'),
         'pic': fields.binary('Image', widget='Image'),
+        "manger_id": fields.many2one("project.employees", "Manger"),
         'warehouse_id': fields.many2one('project.warehouse', 'Warehouse'),
         'user_system': fields.many2one("res.users", "User System"),
 
     }
-    
