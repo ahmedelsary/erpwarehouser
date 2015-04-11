@@ -128,17 +128,18 @@
             <field name="model">project.product</field>
             <field name="arch" type="xml">
                 <tree string="Project Products">
-                    <field name="name" string="الاسم"/>
-                    <field name="price"/>
+                    <field name="code"/>
+
+                    <field name="name" string="الاسم" />
+                    <field name="price" />
                     <field name="type"/>
-                    <field name="company_name"/>
+                    <field name="company_name" />
                     <field name="image"/>
                     <field name="production_date"/>
                     <field name="expiry_date"/>
-                    <field name="code"/>
-                    <field name="min"/>
+                    <field name="min" />
                     <field name="quantity"/>
-                    <field name="max"/>
+                    <field name="max" />
                     <field name="warehouse_id"/>
                     <field name="subsubcatid"/>
 
@@ -185,14 +186,14 @@
                         <group>
                             <group string="Basic Info">
                                 <field name="company_name"/>
-                                <field name="name"/>
-                                <field name="price"/>
+                                <field name="name" required="1"/>
+                                <field name="price" required="1"/>
                                 <field name="code" invisible="1"/>
                                 <field name="warehouse_id"/>
                                 <field name="status"/>
-                                <field name="min"/>
-                                <field name="quantity"/>
-                                <field name="max"/>
+                                <field name="min" required="1"/>
+                                <field name="quantity" required="1"/>
+                                <field name="max" required="1"/>
 
 
                             </group>

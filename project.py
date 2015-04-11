@@ -39,8 +39,9 @@ class project_product(orm.Model):
         result = {}
         products = self.browse(cr, uid, ids, context)
         for product in products:
-            product.code = long(str(product.subsubcatid.subcategory_id.category_id.id) + "" + str(
-                product.subsubcatid.subcategory_id.id) + "" + str(product.subsubcatid.id) + str(product.id))
+            product.code = (
+                (" %02d" % product.subsubcatid.subcategory_id.category_id.id) + "" + "%02d" % product.subsubcatid.subcategory_id.id
+                + "" + "%02d" % product.subsubcatid.id + "%02d" % product.id)
             result[product.id] = product.code
 
         return result
@@ -98,7 +99,7 @@ class project_product(orm.Model):
         'production_date': fields.date('تاريخ اﻻنتاج'),
         'expiry_date': fields.date('تاريخ اﻻنتهاء'),
         'subsubcatid': fields.many2one('project.subsubcategory', 'القسم تحت الفرعى', required=True),
-        'code': fields.function(_calc_salary, method=True, type='integer', store=True, string='الكود'),
+        'code': fields.function(_calc_salary, method=True, type='string', string='الكود'),
         'warehouse_id': fields.many2one("project.warehouse", "المخزن", required=True),
         'min': fields.integer("اقل كميه "),
         'max': fields.integer("اكبر كميه  "),
