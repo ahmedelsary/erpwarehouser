@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report id="action_product_report"
+            name="product.report"
+            string="Product Report"
+            model="project.product"
+            file="erpwarehouser/report/product_max_min.mako"
+            report_type="webkit"
+            auto="False"/>
+            <!--webkit_header="report_webkit.ir_header_webkit_basesample0"-->
+
+    </data>
+</openerp>

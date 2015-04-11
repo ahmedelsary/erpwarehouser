@@ -13,12 +13,11 @@
 
                                 <field name="name"/>
                                 <field name="description"/>
-                                <field name="code"/>
 
                             </group>
                             <group>
 
-                                <!--<field name="subcategory_ids"/>-->
+                                <field name="subcategory_ids"/>
                             </group>
                         </group>
 
@@ -33,13 +32,12 @@
                 <tree string="categories" version="7.0">
                     <field name="name"/>
                     <field name="description"/>
-                    <field name="code"/>
                     <!--<field name="subcategory_ids"/>-->
 
                 </tree>
             </field>
         </record>
-<!--******************************************************************************************************-->
+        <!--******************************************************************************************************-->
         <record model="ir.ui.view" id="project_subcategory_form">
             <field name="name"/>
             <field name="model">project.subcategory</field>
@@ -51,12 +49,11 @@
 
                                 <field name="name"/>
                                 <field name="description"/>
-                                <field name="code"/>
 
                             </group>
                             <group>
                                 <field name="category_id"/>
-                                <!--<field name="subsubcategory_ids"/>-->
+                                <field name="subsubcategory_ids"/>
                             </group>
                         </group>
 
@@ -72,16 +69,15 @@
                 <tree string="Subcategories" version="7.0">
                     <field name="name"/>
                     <field name="description"/>
-                    <field name="code"/>
                     <field name="category_id"/>
-                    <!--<field name="subsubcategory_ids"/>-->
+                    <field name="subsubcategory_ids"/>
 
                 </tree>
             </field>
         </record>
         <!--*******************************************************************************************-->
-         
-         
+
+
         <record model="ir.ui.view" id="project_warehouse_tree">
             <field name="name">project.warehouse.tree</field>
             <field name="model">project.warehouse</field>
@@ -90,9 +86,13 @@
                     <field name="name"/>
                     <field name="address"/>
                     <field name="product_ids"/>
-                    <!--<field name="keeper_id"/>-->
-                    <!--<field name="manager_id"/>-->
-                    <!--<field name="supermanager_id"/>-->
+                    <field name="keeper_id"/>
+                    <field name="manager_id"/>
+                    <field name="supermanager_id"/>
+                    <field name="commit1_id"/>
+                    <field name="commit2_id"/>
+                    <field name="commit3_id"/>
+
                 </tree>
             </field>
         </record>
@@ -107,17 +107,22 @@
                             <field name="address"/>
                         </group>
                         <group>
-                            <!--<field name="keeper_id"/>-->
-                            <!--<field name="manager_id"/>-->
-                            <!--<field name="supermanager_id"/>-->
+                            <field name="keeper_id"/>
+                            <field name="manager_id"/>
+                            <field name="supermanager_id"/>
+
+                            <field name="commit1_id"/>
+                            <field name="commit2_id"/>
+                            <field name="commit3_id"/>
+
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
         <!--***************************************************************-->
-         
-         
+
+
         <record id="project_product_tree" model="ir.ui.view">
             <field name="name">project.product.tree</field>
             <field name="model">project.product</field>
@@ -132,10 +137,10 @@
                     <field name="expiry_date"/>
                     <field name="code"/>
                     <field name="min"/>
+                    <field name="quantity"/>
+
                     <field name="max"/>
                     <field name="warehouse_id"/>
-                    <field name="catid"/>
-                    <field name="subcat"/>
                     <field name="subsubcatid"/>
 
 
@@ -150,17 +155,29 @@
                 <form string="Products" version="7.0">
                     <sheet>
                         <header>
-                            <button name="product_recieved" string="Recieved" states="new"/>
-                            <button name="product_under_review" string="Under Review" states="recieved"/>
-                            <button name="product_approved_commit1" string="Commitee 1" states="underReview"/>
-                            <button name="product_approved_commit2" string="Commitee 2" states="underReview"/>
-                            <button name="product_approved_commit3" string="Commitee 3" states="underReview"/>
-                            <button name="product_keeper_confirm" string="Keeper Confirm" states="approved"/>
-                            <button name="product_manager_confirm" string="Manager Confirm" states="keeperConfirm"/>
-                            <button name="product_in_stock" string="Super Manager Confirm" states="managerConfirm"/>
+                            <field name="is_keeper" invisible="1"/>
+                            <field name="is_commit" invisible="1"/>
+                            <field name="is_manger" invisible="1"/>
+                            <field name="is_supermanger" invisible="1"/>
+
+                            <button name="product_recieved" string="Recieved" states="new"
+                                    attrs="{'invisible':['|',('is_keeper','=',False),('state','!=','new')]}"/>
+                            <button name="product_under_review" string="Under Review" states="recieved"
+                                    attrs="{'invisible':['|',('is_commit','=',False),('state','!=','recieved')]}"/>
+
+                            <button name="product_approved_commit1" string="Committee" states="underReview"
+                                    attrs="{'invisible':['|',('is_commit','=',False),('state','!=','underReview')]}"/>
+
+                            <button name="product_keeper_confirm" string="Keeper Confirm" states="approved"
+                                    attrs="{'invisible':['|',('is_keeper','=',False),('state','!=','approved')]}"/>
+                            <button name="product_manager_confirm" string="Manager Confirm" states="keeperConfirm"
+                                    attrs="{'invisible':['|',('is_manger','=',False),('state','!=','keeperConfirm')]}"/>
+                            <button name="product_in_stock" string="Super Manager Confirm" states="managerConfirm"
+                                    attrs="{'invisible':['|',('is_supermanger','=',False),('state','!=','managerConfirm')]}"/>
 
 
-                            <field name="state" widget="statusbar" statusbar_visible="new,recieved,underReview,approved,keeperConfirm,managerConfirm,inStock"/>
+                            <field name="state" widget="statusbar"
+                                   statusbar_visible="new,recieved,underReview,approved,keeperConfirm,managerConfirm,inStock"/>
 
                         </header>
                         <group>
@@ -171,20 +188,18 @@
                                 <field name="company_name"/>
                                 <field name="name"/>
                                 <field name="price"/>
-                                <field name="code"/>
+                                <field name="code" invisible="1"/>
                                 <field name="warehouse_id"/>
                                 <field name="status"/>
                                 <field name="min"/>
+                                <field name="quantity"/>
                                 <field name="max"/>
-
 
 
                             </group>
                             <group string="Other Info">
                                 <field name="production_date"/>
                                 <field name="expiry_date"/>
-                                <field name="catid"/>
-                                <field name="subcat"/>
                                 <field name="subsubcatid"/>
                             </group>
                         </group>
@@ -193,47 +208,47 @@
             </field>
         </record>
 
-<!--******************************************************************************-->
-         
-         
-<record model="ir.ui.view" id="project_employees_tree">
+        <!--******************************************************************************-->
+
+
+        <record model="ir.ui.view" id="project_employees_tree">
             <field name="name">project.employees.tree</field>
             <field name="model">project.employees</field>
             <field name="arch" type="xml">
                 <tree string="project_employees">
-                     <field name="pic"/>
+                    <field name="pic"/>
                     <field name="name"/>
                     <field name="age"/>
                     <field name="salary"/>
                     <field name="gender" required="1"/>
                     <field name="check"/>
                     <field name="user_system" required="1"/>
-                  <field name="warehouse_id"/>
+                    <field name="warehouse_id"/>
                 </tree>
             </field>
         </record>
 
 
-       <record id="project_employees_form" model="ir.ui.view">
+        <record id="project_employees_form" model="ir.ui.view">
             <field name="name">project.employees.form</field>
             <field name="model">project.employees</field>
             <field name="arch" type="xml">
                 <form string="project employees" version="7.0">
-          
+
                     <group string="basic info">
-                         <field name="pic"/>
+                        <field name="pic"/>
                         <field name="name"/>
                         <field name="age"/>
                         <field name="salary" attrs="{'invisible': [('gender', '=', 'f')]}"/>
-                         <field name="gender" required="1"/>
+                        <field name="gender" required="1"/>
 
                         <field name="user_system" required="1"/>
 
 
-                            <field name="check"/>
- <field name="warehouse_id"/>
+                        <field name="check"/>
+                        <field name="warehouse_id"/>
 
-                  </group>
+                    </group>
                 </form>
             </field>
         </record>
@@ -243,10 +258,8 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
-         
-         
-         
-         
+
+
         <record model="ir.ui.view" id="project_subcategory_form">
             <field name="name"/>
             <field name="model">project.subcategory</field>
@@ -258,7 +271,6 @@
 
                                 <field name="name"/>
                                 <field name="description"/>
-                                <field name="code"/>
 
                             </group>
                             <group>
@@ -279,7 +291,6 @@
                 <tree string="Subcategories" version="7.0">
                     <field name="name"/>
                     <field name="description"/>
-                    <field name="code"/>
                     <field name="category_id"/>
                     <!--<field name="subsubcategory_ids"/>-->
 
@@ -293,6 +304,10 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
+
+        <menuitem id="top_iti" name="HrWarehouse"/>
+        <menuitem id="warehouse_menu" name="Our WareHouse" parent="top_iti"/>
+
         <menuitem id="category_name" name="category" parent="warehouse_menu" action="project_category_action"/>
         <!--****************************************-->
         <record id="project_subcategory_action" model="ir.actions.act_window">
@@ -303,14 +318,15 @@
         </record>
         <menuitem id="subcategory_name" name="subcategory" parent="warehouse_menu" action="project_subcategory_action"/>
         <!--**************************************-->
-            <record id="project_subsubcategory_action" model="ir.actions.act_window">
+        <record id="project_subsubcategory_action" model="ir.actions.act_window">
             <field name="name">project subsubcategory</field>
             <field name="res_model">project.subsubcategory</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <menuitem id="subsubcategory_name" name="subsubcategory" parent="warehouse_menu" action="project_subsubcategory_action"/>
-  <!--**********************************-->
+        <menuitem id="subsubcategory_name" name="subsubcategory" parent="warehouse_menu"
+                  action="project_subsubcategory_action"/>
+        <!--**********************************-->
         <record id="project_product_action" model="ir.actions.act_window">
             <field name="name">project product</field>
             <field name="res_model">project.product</field>
@@ -319,7 +335,7 @@
         </record>
         <menuitem id="product_name" name="product" parent="warehouse_menu" action="project_product_action"/>
 
-      <!--***************************************************************-->
+        <!--***************************************************************-->
         <record id="project_warehouse_action" model="ir.actions.act_window">
             <field name="name">project warehouse</field>
             <field name="res_model">project.warehouse</field>
@@ -327,11 +343,35 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="top_iti" name="HrWarehouse"/>
-        <menuitem id="warehouse_menu" name="Our WareHouse" parent="top_iti"/>
         <menuitem id="ware_name" name="Ware House" parent="warehouse_menu" action="project_warehouse_action"/>
         <!--****************************-->
 
+
+        <record model="ir.ui.view" id="product_search_view">
+            <field name="name">product.search</field>
+            <field name="model">project.product</field>
+            <field name="arch" type="xml">
+                <search string="Product Search">
+                    <filter string="My product" icon="terp-partner"
+                        name="my_products"
+                        domain="[('warehouse_id.keeper_id.id','=',uid)]"
+                        help="My own product" />
+                    <field name="name"/>
+                    <field name="code"/>
+
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="product_list_action">
+            <field name="name">Products</field>
+            <field name="res_model">project.product</field>
+            <field name="search_view_id" ref="product_search_view"/>
+        </record>
+        <menuitem id="pro_menu"
+                  name="Products"
+                  parent="warehouse_menu"
+                  action="product_list_action"/>
 
     </data>
 </openerp>

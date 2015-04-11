@@ -5,37 +5,31 @@
             <field name="name">مخازن</field>
         </record>
 
-             <record model="res.groups" id="iti_user5" >
-           <field name="name">موظف</field>
-            <field name="category_id" ref="iti_cat"/>
-            <field name="implied_ids"
-                  eval="[(4, ref('base.group_user'))]"/>
 
-    </record>
-
-             <record model="res.groups" id="iti_user6" >
-           <field name="name">اعضاءلجنة</field>
-            <field name="category_id" ref="iti_cat"/>
-            <field name="implied_ids"
-                   eval="[(4, ref('base.group_user'))]"/>
-        </record>
-             <record model="res.groups" id="iti_user2" >
-            <field name="name">مدير_المخزن</field>
-            <field name="category_id" ref="iti_cat"/>
-            <field name="implied_ids"
-                   eval="[(4, ref('base.group_user'))]"/>
-        </record>
-        <record model="res.groups" id="iti_user" >
+        <record model="res.groups" id="iti_user">
             <field name="name">امين_المخزن</field>
             <field name="category_id" ref="iti_cat"/>
             <field name="implied_ids"
                    eval="[(4, ref('base.group_user'))]"/>
         </record>
-           <record model="res.groups" id="iti_user4" >
-           <field name="name">رئيس_المخازن</field>
+        <record model="res.groups" id="iti_user6">
+            <field name="name">اعضاءلجنة</field>
             <field name="category_id" ref="iti_cat"/>
             <field name="implied_ids"
-                    eval="[(4, ref('base.group_user'))]"/>
+                   eval="[(4, ref('iti_user'))]"/>
+        </record>
+        <record model="res.groups" id="iti_user2">
+            <field name="name">مدير_المخزن</field>
+            <field name="category_id" ref="iti_cat"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('iti_user6'))]"/>
+        </record>
+
+        <record model="res.groups" id="iti_user4">
+            <field name="name">رئيس_المخازن</field>
+            <field name="category_id" ref="iti_cat"/>
+            <field name="implied_ids"
+                   eval="[(4, ref('iti_user2'))]"/>
         </record>
 
 

@@ -7,7 +7,6 @@ class project_category(orm.Model):
     _columns = {
         'name': fields.char('اﻻسم', size=30, required=True),
         'description': fields.text('الوصف'),
-        'code': fields.integer('الكود', required=True),
         'subcategory_ids': fields.one2many('project.subcategory', 'category_id', 'اﻻقسام الفرعيه'),
     }
 
@@ -17,82 +16,92 @@ class project_subcategory(orm.Model):
     _columns = {
         'name': fields.char('اﻻسم', size=30, required=True),
         'description': fields.text('الوصف'),
-        'code': fields.integer('الكود', required=True),
         'category_id': fields.many2one('project.category', ' اﻻقسام'),
         'subsubcategory_ids': fields.one2many('project.subsubcategory', 'subcategory_id', 'اﻻقسام تحت الفرعيه')
 
     }
-    
-    
+
+
 class project_subsubcategory(orm.Model):
     _name = 'project.subsubcategory'
     _columns = {
         'name': fields.char('اﻻسم', size=30),
         'description': fields.text('الوصف'),
-        'code': fields.integer('الكود', required=True),
         'subcategory_id': fields.many2one('project.subcategory', 'اﻻقسام الفرعيه')
 
     }
 
+
 class project_product(orm.Model):
     _name = 'project.product'
 
-    # def _get_concatenate_values(self, cr, uid, ids, field_name, arg, context=None):
-    # result = {}
-    # products=self.browse(cr,uid,ids)
-    # for product in products:
-    # result[product.id] = str(product.catid)+str(product.subcat)+str(product.subsubcatid)+str(product.prod_id)
-
-
-    # result = dict((x,'') for x in ids)
-    # for r in records:
-    # if(r.catid and r.subcat):
-    #         result[r.id] = "%s %f" % \
-    #                  (r.catid.name or '', r.subcat.name or 0.0)
-    #                   # (r.field1.field1 or '', r.field2.field2 or 0.0)
-    # return result
-    def _get_concatenate_values(self, cr, uid, ids, name, arg, context=None):
-        result = {}
-        ids = self.search(cr, uid, [])
-        product = self.browse(cr, uid, ids, context)
-        #for product in products:
-        #print self._columns['catid'].code
-        result[product.prod_id] = str(product.code) + " " + str(product.catid.code) + " " + str(
-            product.subcat.code) + " " + str(product.subsubcatid.code)
-        return result
-        # for product in products:
-        # if (product.catid and product.subcat and product.subsubcatid):
-        # result[product.prod_id] = str(product.code) + str(product.catid.code) + str( product.subcat.code) + str(product.subsubcatid.code)
-
-
     def _calc_salary(self, cr, uid, ids, name, arg, context):
         result = {}
-        students = self.browse(cr, uid, ids, context)
-        for student in students:
-            student.code=long(str(student.catid.code)+ "" + str(
-            student.subcat.code) + "" + str(student.subsubcatid.code)+str(student.id) )
-            result[student.id] = student.code
+        products = self.browse(cr, uid, ids, context)
+        for product in products:
+            product.code = long(str(product.subsubcatid.subcategory_id.category_id.id) + "" + str(
+                product.subsubcatid.subcategory_id.id) + "" + str(product.subsubcatid.id) + str(product.id))
+            result[product.id] = product.code
 
         return result
 
+    def check_keeper(self, cr, uid, ids, name, arg, context):
+        res = {}
+        for product in self.browse(cr, uid, ids, context=context):
+            keeper_id = product.warehouse_id.keeper_id.id
+            if keeper_id == uid:
+                res[product.id] = True
+            else:
+                res[product.id] = False
+        return res
+
+
+    def check_commit(self, cr, uid, ids, name, arg, context):
+        res = {}
+        for product in self.browse(cr, uid, ids, context=context):
+            commit1_id = product.warehouse_id.commit1_id.id
+            commit2_id = product.warehouse_id.commit2_id.id
+            commit3_id = product.warehouse_id.commit3_id.id
+            if (commit1_id == uid ) or (commit2_id == uid ) or (commit3_id == uid ):
+                res[product.id] = True
+            else:
+                res[product.id] = False
+        return res
+
+    def check_manger(self, cr, uid, ids, name, arg, context):
+        res = {}
+        for product in self.browse(cr, uid, ids, context=context):
+            manger_id = product.warehouse_id.manager_id.id
+            if manger_id == uid:
+                res[product.id] = True
+            else:
+                res[product.id] = False
+        return res
+
+    def check_supermanger(self, cr, uid, ids, name, arg, context):
+        res = {}
+        for product in self.browse(cr, uid, ids, context=context):
+            supermanger_id = product.warehouse_id.supermanager_id.id
+            if supermanger_id == uid:
+                res[product.id] = True
+            else:
+                res[product.id] = False
+        return res
 
     _columns = {
-        'name': fields.char('اﻻسم'),
-        'prod_id': fields.integer('Product_ID'),
-        'price': fields.char('السعر'),
-
+        'name': fields.char('اسم '),
         'type': fields.char('النوع'),
         'company_name': fields.char('اسم الشركه'),
         'image': fields.binary('صورة'),
+        'quantity': fields.integer("الكميه" ),
+        'price': fields.char('السعر'),
         'production_date': fields.date('تاريخ اﻻنتاج'),
         'expiry_date': fields.date('تاريخ اﻻنتهاء'),
-        'catid': fields.many2one('project.category', 'القسم', required=True),
-        'subcat': fields.many2one('project.subcategory', 'القسم الفرعى', required=True),
         'subsubcatid': fields.many2one('project.subsubcategory', 'القسم تحت الفرعى', required=True),
-        'code': fields.function(_calc_salary, string='الكود'),
-        'warehouse_id': fields.many2one("project.warehouse", "المخزن"),
-        'min': fields.integer("اقل كميه موجوده"),
-        'max': fields.integer("اكبر كميه موجوده "),
+        'code': fields.function(_calc_salary, method=True, type='integer', store=True, string='الكود'),
+        'warehouse_id': fields.many2one("project.warehouse", "المخزن", required=True),
+        'min': fields.integer("اقل كميه "),
+        'max': fields.integer("اكبر كميه  "),
         'status': fields.selection(string="الحاله", selection=[
             ("new", "جديده"),
             ('used', "مستعمله"),
@@ -107,8 +116,18 @@ class project_product(orm.Model):
             ('managerConfirm', 'Manager Confirm'),
             ('inStock', 'In Stock'),
         ], readonly=True),
-    }
+        'is_keeper': fields.function(check_keeper, type='boolean', store=False),
+        'is_commit': fields.function(check_commit, type='boolean', store=False),
+        'is_manger': fields.function(check_manger, type='boolean', store=False),
+        'is_supermanger': fields.function(check_supermanger, type='boolean', store=False),
 
+
+    }
+    _defaults = {
+        'state': 'new',
+        'min': 500,
+        'max': 50000,
+    }
 
     def product_new(self, cr, uid, ids):
         self.write(cr, uid, ids, {'state': 'new'})
@@ -116,6 +135,7 @@ class project_product(orm.Model):
 
 
     def product_recieved(self, cr, uid, ids):
+
         self.write(cr, uid, ids, {'state': 'recieved'})
         return True
 
@@ -144,21 +164,23 @@ class project_product(orm.Model):
         self.write(cr, uid, ids, {'state': 'inStock'})
         return True
 
-    
-
 
 class project_warehouse(orm.Model):
     _name = 'project.warehouse'
     _columns = {
         'name': fields.char('اﻻسم', size=30, required=True),
         'address': fields.char('العنوان', size=100),
-        # 'keeper_id':fields.many2one('hr','امين المخزن',select=True),
-        # 'manager_id':fields.many2one('hr','مدير ',select=True),
-        # 'supermanager_id':fields.many2one('hr','الرئيس',select=True ,domain="[('id','=','ref('ourwarehouse.group_iti_warehouse_supermanager')')]"),),
         'product_ids': fields.one2many('project.product', 'warehouse_id', string="المنتجات"),
+        'keeper_id': fields.many2one('res.users', 'امين المخزن', select=True, required=True),
+        'manager_id': fields.many2one('res.users', 'مدير ', select=True, required=True),
+        'supermanager_id': fields.many2one('res.users', 'الرئيس', select=True, required=True),
+        'commit1_id': fields.many2one('res.users', 'عضولجنه', select=True, required=True),
+        'commit2_id': fields.many2one('res.users', 'عضولجنه', select=True, required=True),
+        'commit3_id': fields.many2one('res.users', 'عضولجنه', select=True, required=True),
 
     }
-    
+
+
 class project_employees(orm.Model):
     gender = [('f', 'female'), ('m', 'male')]
     _name = 'project.employees'
@@ -168,9 +190,9 @@ class project_employees(orm.Model):
         'salary': fields.integer('Salary'),
         'gender': fields.selection(gender, 'Gender'),
         'check': fields.boolean('Check'),
-         'pic': fields.binary('Image',widget='Image'),
-         'warehouse_id': fields.many2one('project.warehouse', 'Warehouse'),
-        'user_system':fields.many2one("res.users","User System"),
+        'pic': fields.binary('Image', widget='Image'),
+        'warehouse_id': fields.many2one('project.warehouse', 'Warehouse'),
+        'user_system': fields.many2one("res.users", "User System"),
 
     }
     
